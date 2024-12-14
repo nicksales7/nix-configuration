@@ -11,25 +11,19 @@ in
 
 {
   imports = [
-    ./hardware-configuration.nix # Hardware configuration.
+    ./hardware-configuration.nix
   ];
 
-  # Bootloader settings.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.blacklistedKernelModules = [ "nouveau" ];
 
-  # System hostname.
   networking.hostName = "nixos";
+  networking.networkmanager.enable = true;
 
-  # Network configuration.
-  networking.networkmanager.enable = true; # Easy-to-use network management.
-
-  # Timezone and localization settings.
   time.timeZone = "Canada/Eastern";
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # Enable OpenGL
   hardware.graphics = {
     enable = true;
   };
@@ -55,7 +49,6 @@ in
     powerOnBoot = true;
   };
 
-  # X11 and window manager settings.
   services.xserver = {
     enable = true;
     videoDrivers = ["nvidia"];
@@ -107,23 +100,19 @@ in
     };
   };
 
-  # Enable unfree packages and flakes.
   nixpkgs.config.allowUnfree = true;
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # Enable printing support.
   services.printing.enable = true;
 
-  # Enable sound using PipeWire.
   services.pipewire = {
     enable = true;
     pulse.enable = true;
   };
 
-  # User configuration.
   users.users.nick = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable sudo for the user.
+    extraGroups = [ "wheel" ]; 
     packages = with pkgs; [ tree ];
   };
 
@@ -138,7 +127,6 @@ in
     GTK_THEME = "Adwaita:dark"; 
   };
   
-  # System-wide packages.
   environment.systemPackages = with pkgs; [
     helix
     wget
@@ -152,9 +140,7 @@ in
     nvidia-offload
   ];
 
-  # Enable OpenSSH daemon.
   services.openssh.enable = true;
 
-  # System state version (do not change without migration).
   system.stateVersion = "24.11";
 }
